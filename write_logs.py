@@ -2,6 +2,7 @@ import datetime
 import cv2
 import os
 
+
 def write_logs(names, frame):
     today = datetime.datetime.now()
     day = today.strftime("%Y-%m-%d")
@@ -16,7 +17,7 @@ def write_logs(names, frame):
     for name in names:
         full_logs = str(name) + " " + str(today)
         # print(full_logs)
-        if name not in list_log and name != "":
+        if name not in list_log and name is None:
             path_log_images = "log_images"
             cv2.imshow("catch", frame)
             print("New log: " + full_logs)
