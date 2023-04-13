@@ -51,7 +51,7 @@ class FaceRegconition:
                 rgb_small_frame = small_frame[:, :, ::-1]
                 
                 self.face_locations = face_recognition_custom.face_locations(rgb_small_frame)
-                self.face_encodings = face_recognition_custom.face_encodings(rgb_small_frame, self.face_locations)     
+                self.face_encodings = face_recognition_custom.face_encodings(rgb_small_frame, self.face_locations, model="small")     
                 
                 self.face_names = []
                 short_names = []
