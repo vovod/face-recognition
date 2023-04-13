@@ -1,2 +1,4 @@
+**/**.jpg
 data_face
 face_recognition_custom
+__pycache__
