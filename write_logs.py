@@ -2,7 +2,6 @@ import datetime
 import cv2
 import os
 
-
 def write_logs(names, frame):
     today = datetime.datetime.now()
     day = today.strftime("%Y-%m-%d")

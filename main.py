@@ -69,7 +69,7 @@ class FaceRegconition:
                     if confidence == "???":   
                         self.face_names.append("UNK")
                     else:
-                        if float(confidence[:-1]) < 88.0:
+                        if float(confidence[:-1]) < 86.0:
                             self.face_names.append("UNK")
                         else:
                             self.face_names.append(f'{name[:-4]} ({confidence})')
