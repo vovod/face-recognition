@@ -51,7 +51,7 @@ class FaceRegconition:
                 rgb_small_frame = small_frame[:, :, ::-1]
                 
                 self.face_locations = face_recognition_custom.face_locations(rgb_small_frame)
-                self.face_encodings = face_recognition_custom.face_encodings(rgb_small_frame, self.face_locations, model="small")     
+                self.face_encodings = face_recognition_custom.face_encodings(rgb_small_frame, self.face_locations)     
                 
                 self.face_names = []
                 short_names = []
@@ -66,8 +66,10 @@ class FaceRegconition:
                     if matches[best_match_index]:
                         name = self.known_face_names[best_match_index]
                         confidence = face_confidence(face_distances[best_match_index])
-                        
-                    self.face_names.append(f'{name[:-4]} ({confidence})')
+                    if confidence == "???": 
+                        self.face_names.append("UNK")
+                    else:
+                        self.face_names.append(f'{name[:-4]} ({confidence})')
                     short_names.append(f'{name[:-4]}')
                 
             self.process_current_frame = not self.process_current_frame
@@ -77,7 +79,7 @@ class FaceRegconition:
                 right *= 4
                 bottom *= 4
                 left *= 4
-                if name[:3] == "UNK":
+                if name == "UNK":
                     cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
                     cv2.rectangle(frame, (left, bottom -35), (right, bottom), (0, 0, 255), cv2.FILLED)
                     cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255), 1)

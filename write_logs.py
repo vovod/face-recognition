@@ -19,7 +19,7 @@ def write_logs(names, frame):
         if name not in list_log:
             path_log_images = "log_images"
             cv2.imshow("catch", frame)
-            print("New log" + full_logs)
+            print("New log: " + full_logs)
             path_out = path_log_images + "/" + str(day)
             if not os.path.exists(path_out):
                 os.makedirs(path_out)
