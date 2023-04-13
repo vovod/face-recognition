@@ -16,7 +16,7 @@ def write_logs(names, frame):
     for name in names:
         full_logs = str(name) + " " + str(today)
         # print(full_logs)
-        if name not in list_log:
+        if name not in list_log and name != "":
             path_log_images = "log_images"
             cv2.imshow("catch", frame)
             print("New log: " + full_logs)

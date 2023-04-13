@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 from write_logs import write_logs
 
-def face_confidence(face_distance, face_match_threshold=0.6):
+def face_confidence(face_distance, face_match_threshold=0.5):
     range = (1.0 - face_match_threshold)
     linear_val = (1.0 - face_distance) / (range * 2.0)
     
@@ -47,7 +47,7 @@ class FaceRegconition:
             ret, frame = video_capture.read()
             frame = cv2.flip(frame, 1)
             if self.process_current_frame:
-                small_frame = cv2.resize(frame, (0,0), fx=0.25, fy=0.25)
+                small_frame = cv2.resize(frame, (0,0), fx=0.5, fy=0.5)
                 rgb_small_frame = small_frame[:, :, ::-1]
                 
                 self.face_locations = face_recognition_custom.face_locations(rgb_small_frame)
@@ -66,26 +66,30 @@ class FaceRegconition:
                     if matches[best_match_index]:
                         name = self.known_face_names[best_match_index]
                         confidence = face_confidence(face_distances[best_match_index])
-                    if confidence == "???": 
+                    if confidence == "???":   
                         self.face_names.append("UNK")
                     else:
-                        self.face_names.append(f'{name[:-4]} ({confidence})')
+                        if float(confidence[:-1]) < 88.0:
+                            self.face_names.append("UNK")
+                        else:
+                            self.face_names.append(f'{name[:-4]} ({confidence})')
                     short_names.append(f'{name[:-4]}')
                 
             self.process_current_frame = not self.process_current_frame
             
             for (top, right, bottom, left), name in zip(self.face_locations, self.face_names):
-                top *= 4
-                right *= 4
-                bottom *= 4
-                left *= 4
+                top *= 2
+                right *= 2
+                bottom *= 2
+                left *= 2
+                #0.25 *=4 -35 +6 -6
                 if name == "UNK":
-                    cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-                    cv2.rectangle(frame, (left, bottom -35), (right, bottom), (0, 0, 255), cv2.FILLED)
+                    cv2.rectangle(frame, (left, top + 5), (right, bottom + 5), (0, 0, 255), 2)
+                    cv2.rectangle(frame, (left, bottom -35), (right, bottom + 5), (0, 0, 255), cv2.FILLED)
                     cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255), 1)
                 else:
-                    cv2.rectangle(frame, (left, top), (right, bottom), (50,205,50), 2)
-                    cv2.rectangle(frame, (left, bottom -35), (right, bottom), (50,205,50), cv2.FILLED)
+                    cv2.rectangle(frame, (left, top + 5), (right, bottom + 5), (50,205,50), 2)
+                    cv2.rectangle(frame, (left, bottom -35), (right, bottom + 5), (50,205,50), cv2.FILLED)
                     cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255), 1)
                     write_logs(short_names, frame)
                 
