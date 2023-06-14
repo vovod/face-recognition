@@ -1,0 +1,3 @@
+face_recognition
+numpy==1.24.3
+opencv-python==4.7.0.72
