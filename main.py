@@ -1,6 +1,6 @@
 import math
 import os, sys
-import face_recognition_custom
+import face_recognition
 import cv2
 import numpy as np
 from write_logs import write_logs
@@ -30,8 +30,8 @@ class FaceRegconition:
         # for image in os.listdir('data_face'):
         #     print(image)
         for image in os.listdir('data_face'):
-            face_image = face_recognition_custom.load_image_file(f"data_face/{image}")
-            face_encoding = face_recognition_custom.face_encodings(face_image)[0]
+            face_image = face_recognition.load_image_file(f"data_face/{image}")
+            face_encoding = face_recognition.face_encodings(face_image)[0]
             
             self.known_face_encodings.append(face_encoding)
             self.known_face_names.append(image)           
@@ -50,17 +50,17 @@ class FaceRegconition:
                 small_frame = cv2.resize(frame, (0,0), fx=0.5, fy=0.5)
                 rgb_small_frame = small_frame[:, :, ::-1]
                 
-                self.face_locations = face_recognition_custom.face_locations(rgb_small_frame)
-                self.face_encodings = face_recognition_custom.face_encodings(rgb_small_frame, self.face_locations, model="small")     
+                self.face_locations = face_recognition.face_locations(rgb_small_frame)
+                self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations, model="small")     
                 
                 self.face_names = []
                 short_names = []
                 for face_encoding in self.face_encodings:
-                    matches = face_recognition_custom.compare_faces(self.known_face_encodings, face_encoding)
+                    matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
                     name = "UNK"
                     confidence = "???"
                     
-                    face_distances = face_recognition_custom.face_distance(self.known_face_encodings, face_encoding)
+                    face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
                     best_match_index = np.argmin(face_distances)
                     
                     if matches[best_match_index]:
